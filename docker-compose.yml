@@ -9,18 +9,22 @@ services:
         ports:
             - '3000:3000'
         volumes:
-            - .:/app # Mount source code
-            - /app/node_modules # Mount node_modules
-            - ./data:/app/data # Mount thư mục data
-            - ./.env:/app/.env # Mount file .env vật lý (nếu app cần đọc file)
+            - .:/app
+            - /app/node_modules
+            - ./data:/app/data
+            - ./.env:/app/.env
         env_file:
-            - .env # Load biến môi trường từ file .env
+            - .env
         environment:
-            - CHOKIDAR_USEPOLLING=true # Thêm biến ngoài file .env nếu cần
+            - CHOKIDAR_USEPOLLING=true
         command: npm start
         networks:
-            - custom_network
+            custom_network:
+                ipv4_address: 172.20.0.10 # <-- Đặt IP cố định ở đây
 
 networks:
     custom_network:
         driver: bridge
+        ipam:
+            config:
+                - subnet: 172.20.0.0/24 # <-- Phạm vi IP pool bạn đặt
